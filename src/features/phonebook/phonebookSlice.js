@@ -52,6 +52,10 @@ const phonebookSlice = createSlice({
         state.contacts.isLoading = false;
         state.contacts.items.push(action.payload);
       })
+      .addCase(addNewContact.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.payload;
+      })
       .addCase(deleteContact.pending, state => {
         state.contacts.isLoading = true;
       })
@@ -62,6 +66,10 @@ const phonebookSlice = createSlice({
           contact => contact.id !== id
         );
         state.contacts.items = newContacts;
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.payload;
       });
   },
 });
