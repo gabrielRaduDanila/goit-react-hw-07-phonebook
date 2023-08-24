@@ -41,6 +41,10 @@ const phonebookSlice = createSlice({
         state.contacts.isLoading = false;
         state.contacts.items = action.payload;
       })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.payload;
+      })
       .addCase(addNewContact.pending, state => {
         state.contacts.isLoading = true;
       })

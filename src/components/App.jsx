@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import Modal from './modal/Modal';
 import { useEffect } from 'react';
 import { fetchContacts } from 'features/operations/operations';
+import Notiflix from 'notiflix';
+import LoadingSpinner from './loader/LoadingSpinner';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -12,6 +14,7 @@ export const App = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
   const phonebook = useSelector(store => store.phonebook);
+  const { isLoading, error } = phonebook.contacts;
   const contacts = phonebook.contacts.items;
   const filter = phonebook.filter;
   const { isOpen } = useSelector(store => store.modal);
@@ -31,6 +34,8 @@ export const App = () => {
         <h3>Add contacts to be displayed</h3>
       )}
       {isOpen && <Modal />}
+      {error && Notiflix.Notify.failure(error)}
+      {isLoading && <LoadingSpinner />}
     </div>
   );
 };
