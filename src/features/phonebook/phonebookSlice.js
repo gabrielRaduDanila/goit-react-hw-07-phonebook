@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
+import {
+  fetchContacts,
+  addNewContact,
+  deleteContact,
+} from 'features/operations/operations';
 
-const initialState1 = {
+const initialState = {
   contacts: {
     items: [],
     isLoading: false,
     error: null,
   },
-  filter: '',
-};
-
-const initialState = {
-  contacts: [],
   filter: '',
 };
 
@@ -23,24 +22,46 @@ const phonebookSlice = createSlice({
       const { typedName } = payload;
       state.filter = typedName;
     },
-    addContact: (state, { payload }) => {
-      const { name, number } = payload;
-      const person = {
-        id: nanoid(5),
-        name: name,
-        number: number,
-      };
-      const newContacts = [...state.contacts, person];
-      state.contacts = newContacts;
-    },
-    removeContact: (state, { payload }) => {
-      const { id } = payload;
-      const newContacts = state.contacts.filter(contact => contact.id !== id);
-      state.contacts = newContacts;
-    },
+  },
+  // extraReducers: {
+  //   [fetchContacts.pending](state) {
+  //     state.contacts.isLoading = true;
+  //   },
+  //   [fetchContacts.fulfilled](state, action) {
+  //     state.contacts.isLoading = false;
+  //     state.contacts.items = action.payload;
+  //   },
+  // },
+  extraReducers: builder => {
+    builder
+      .addCase(fetchContacts.pending, state => {
+        state.contacts.isLoading = true;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.items = action.payload;
+      })
+      .addCase(addNewContact.pending, state => {
+        state.contacts.isLoading = true;
+      })
+      .addCase(addNewContact.fulfilled, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.items.push(action.payload);
+      })
+      .addCase(deleteContact.pending, state => {
+        state.contacts.isLoading = true;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.contacts.isLoading = false;
+        const id = action.payload.id;
+        const newContacts = state.contacts.items.filter(
+          contact => contact.id !== id
+        );
+        state.contacts.items = newContacts;
+      });
   },
 });
 
-export const { addFilter, addContact, removeContact } = phonebookSlice.actions;
+export const { addFilter } = phonebookSlice.actions;
 
 export default phonebookSlice.reducer;

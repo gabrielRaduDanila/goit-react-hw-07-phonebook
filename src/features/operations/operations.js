@@ -3,18 +3,38 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'https://64e7067cb0fd9648b78f35c9.mockapi.io';
 
-export const fetchTasks = createAsyncThunk(
-  'tasks/fetchAll',
-  // Folosim caracterul "underscore" ca nume al primului parametru
-  // deoarece nu avem nevoie de el în această operație
+export const fetchContacts = createAsyncThunk(
+  'contacts/fetchAll',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get('/tasks');
-      // În cazul unei cereri cu succes, vom returna un promise cu date
+      const response = await axios.get('/contacts');
       return response.data;
     } catch (e) {
-      // Dacă cererea eșuează, returnăm un promise care va fi respins
-      // și va conține textul erorii
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const addNewContact = createAsyncThunk(
+  'contacts/add',
+  async (contact, thunkAPI) => {
+    try {
+      const response = await axios.post('/contacts', contact);
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
+    }
+  }
+);
+
+export const deleteContact = createAsyncThunk(
+  'contacts/deleteContact',
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.delete(`/contacts/${id}`);
+
+      return response.data;
+    } catch (e) {
       return thunkAPI.rejectWithValue(e.message);
     }
   }

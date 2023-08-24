@@ -1,12 +1,20 @@
 import ContactForm from './contact-form/ContactForm';
 import ContactList from './contact-list/ContactList';
 import Filter from './filter/Filter';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Modal from './modal/Modal';
+import { useEffect } from 'react';
+import { fetchContacts } from 'features/operations/operations';
 
 export const App = () => {
-  const { contacts, filter } = useSelector(store => store.phonebook);
-  const { isOpen } = useSelector(state => state.modal);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+  const phonebook = useSelector(store => store.phonebook);
+  const contacts = phonebook.contacts.items;
+  const filter = phonebook.filter;
+  const { isOpen } = useSelector(store => store.modal);
   return (
     <div style={{ padding: 20 }}>
       <h1>Phonebook</h1>

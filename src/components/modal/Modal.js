@@ -1,7 +1,7 @@
 import './Modal.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from 'features/modal/modalSlice';
-import { removeContact } from 'features/phonebook/phonebookSlice';
+import { deleteContact } from 'features/operations/operations';
 
 const Modal = () => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const Modal = () => {
             type="button"
             className="btn confirm-btn"
             onClick={() => {
-              dispatch(removeContact({ id }));
+              dispatch(deleteContact(id));
               dispatch(closeModal());
             }}
           >

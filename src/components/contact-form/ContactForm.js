@@ -1,10 +1,11 @@
 import './ContactForm.css';
 import { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addContact } from 'features/phonebook/phonebookSlice';
+import { addNewContact } from 'features/operations/operations';
 
 const ContactForm = () => {
-  const { contacts } = useSelector(state => state.phonebook);
+  const phonebook = useSelector(state => state.phonebook);
+  const contacts = phonebook.contacts.items;
   const dispatch = useDispatch();
   const nameInput = useRef();
   const numberInput = useRef();
@@ -33,7 +34,12 @@ const ContactForm = () => {
       alert(`${matchPerson.name} is already in contacts`);
       return;
     }
-    dispatch(addContact({ name, number }));
+    const person = {
+      name: name,
+      phone: number,
+    };
+
+    dispatch(addNewContact(person));
     e.target.reset();
   };
 

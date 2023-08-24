@@ -11,7 +11,10 @@ const findFilteredContacts = (contacts, filter) => {
 };
 
 const ContactList = () => {
-  const { filter, contacts } = useSelector(state => state.phonebook);
+  const phonebook = useSelector(state => state.phonebook);
+  const filter = phonebook.filter;
+  const contacts = phonebook.contacts.items;
+
   const dispatch = useDispatch();
 
   const contactsToDisplay = filter
@@ -28,7 +31,7 @@ const ContactList = () => {
             <li key={contactId}>
               <p>
                 <span>{capitalizeName(contact.name)}: </span>
-                {contact.number}
+                {contact.phone}
               </p>
               <button
                 type="button"
